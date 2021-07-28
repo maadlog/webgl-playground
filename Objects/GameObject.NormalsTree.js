@@ -1,13 +1,12 @@
-NormalsTree = function(ctx,vec3_position,size) {
-  this.vec3_position = vec3_position;
-  this.size = size;
-
-	GameObject.call(this,ctx);
-}
-NormalsTree.prototype = Object.create(GameObject.prototype);
-NormalsTree.prototype.constructor = NormalsTree;
-
-NormalsTree.prototype.initBuffers = function(ctx) {
+class NormalsTree extends GameObject {
+  constructor(ctx,vec3_position,size) {
+    super(ctx);
+    this.vec3_position = vec3_position;
+    this.size = size;
+    this.initBuffers(ctx);
+  }
+  
+  initBuffers(ctx) {
 
 	const positionBuffer = ctx.createBuffer();
 
@@ -618,9 +617,9 @@ NormalsTree.prototype.initBuffers = function(ctx) {
   this.indices_count = indicesArray.length;
   this.indices = indexBuffer;
 
-};
+  }
 
-NormalsTree.prototype.render = function(ctx,viewMatrix,projectionMatrix) {
+  render(ctx,viewMatrix,projectionMatrix) {
 	
     this.material.renderBind(ctx,this.transformMatrix,viewMatrix,projectionMatrix);
 
@@ -664,22 +663,22 @@ NormalsTree.prototype.render = function(ctx,viewMatrix,projectionMatrix) {
 		    const vertexCount = this.indices_count;
 		    const type2 = ctx.UNSIGNED_SHORT;
 		    ctx.drawElements(ctx.TRIANGLES, vertexCount, type2, offset);
+  }
 
-  
-};
-NormalsTree.prototype.update = function(time) {
-  var x0 = this.vec3_position[0];
-  var y0 = this.vec3_position[1];
-  var z0 = this.vec3_position[2];
+  update(time) {
+    var x0 = this.vec3_position[0];
+    var y0 = this.vec3_position[1];
+    var z0 = this.vec3_position[2];
 
-  this.transformMatrix = mat4.create();
+    this.transformMatrix = mat4.create();
 
-  mat4.translate(this.transformMatrix,
-    this.transformMatrix,
-    [x0, y0, z0]);
+    mat4.translate(this.transformMatrix,
+      this.transformMatrix,
+      [x0, y0, z0]);
 
-  mat4.scale(this.transformMatrix,
-    this.transformMatrix,
-    [this.size, this.size * 0.6, this.size]);
+    mat4.scale(this.transformMatrix,
+      this.transformMatrix,
+      [this.size, this.size * 0.6, this.size]);
 
-};
+  }
+}

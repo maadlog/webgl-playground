@@ -64,7 +64,7 @@ function handleMouseDown(camera) {
   };
 }
 
-  function handleMouseUp(camera) {
+function handleMouseUp(camera) {
   return function(event) {
     camera.mouseDown = false;
      camera.fix_pitch = camera.fix_pitch + camera.var_pitch;
@@ -76,7 +76,7 @@ function handleMouseDown(camera) {
 }
 
 
-  function handleMouseMove(camera) {
+function handleMouseMove(camera) {
   return function(event) {
     if (!camera.mouseDown) {
       return;
@@ -153,7 +153,6 @@ GameCamera.prototype.update = function(timeElapsed) {
       this.pitch = this.fix_pitch + this.var_pitch;
       this.roll = this.fix_roll + this.var_roll;
 
-
 };
 
 GameCamera.prototype.projectionMatrix = function() {
@@ -176,7 +175,6 @@ GameCamera.prototype.projectionMatrix = function() {
 GameCamera.prototype.viewMatrix = function() {
   
   var lookAt = vec3.create();
-  var rotationMatrix = mat4.create();
 
   var direction = vec3.create();
   var up = vec3.create();

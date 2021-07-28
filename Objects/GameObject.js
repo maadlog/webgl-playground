@@ -1,36 +1,31 @@
-GameObject = function(ctx,material) {
+class GameObject {
+  constructor(ctx,material) {
+    if(!!material)
+    {
+      this.material = material;
+    } 
+    else 
+    {
+      this.material = new GameMaterial(ctx);
+    }  
 
-  if(!!material)
-  {
-    this.material = material;
-  } 
-  else 
-  {
-    this.material = new GameMaterial(ctx);
-  }  
+    this.base_transformMatrix = mat4.create();
+    this.transformMatrix = mat4.create();
+      
+    this.position = null;
+    this.colors = null;
+    this.indices = null;
+    this.indices_count = 0;
+  }
 
-	this.base_transformMatrix = mat4.create();
-  this.transformMatrix = mat4.create();
-    
-  this.position = null;
-  this.colors = null;
-  this.indices = null;
-  this.indices_count = 0;
+  render(ctx,viewMatrix,projectionMatrix) {
+    alert("GameObject.render() must be overriden");
+  };
 
-  this.initBuffers(ctx);
+  update(time) {
+    alert("GameObject.update() must be overriden");
+  };
 }
-
-GameObject.prototype.initBuffers = function(ctx) {
-	alert("GameObject.initBuffers() must be overriden");
-};
-
-GameObject.prototype.render = function(ctx,viewMatrix,projectionMatrix) {
-  alert("GameObject.render() must be overriden");
-};
-GameObject.prototype.update = function(time) {
-alert("GameObject.update() must be overriden");
-};
-
 
 /*
  * For new game objects:
