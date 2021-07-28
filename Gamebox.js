@@ -7,6 +7,8 @@ GameBox = function(canvas_id) {
     this.gameObjects = [];
 
     var htmlCanvas = document.getElementById(canvas_id);
+    htmlCanvas.width = htmlCanvas.clientWidth;
+    htmlCanvas.height = htmlCanvas.clientHeight;
     this.canvas = htmlCanvas;
 
     this.ctx = htmlCanvas.getContext("webgl");
