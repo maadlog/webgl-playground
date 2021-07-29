@@ -18,6 +18,10 @@ class GameObject {
     this.indices_count = 0;
   }
 
+  initBuffers(ctx) {
+    alert("GameObject.initBuffers() must be overriden");
+  }
+
   render(ctx,viewMatrix,projectionMatrix) {
     alert("GameObject.render() must be overriden");
   };

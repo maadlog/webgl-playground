@@ -3,7 +3,6 @@ class NormalsTree extends GameObject {
     super(ctx);
     this.vec3_position = vec3_position;
     this.size = size;
-    this.initBuffers(ctx);
   }
   
   initBuffers(ctx) {

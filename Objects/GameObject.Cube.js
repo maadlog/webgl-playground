@@ -1,61 +1,58 @@
 class Cube extends GameObject {
-  constructor(ctx,vec3_position,side) {
-    super(ctx);
+  constructor(ctx,vec3_position,side, material) {
+    super(ctx, material);
     this.vec3_position = vec3_position;
     this.side = side;
-  
-    
-    this.initBuffers(ctx);
   }
 
   initBuffers(ctx) {
     const positionBuffer = ctx.createBuffer();
-  
+
     ctx.bindBuffer(ctx.ARRAY_BUFFER, positionBuffer);
-  
-    var x0 = this.vec3_position[0];
-    var y0 = this.vec3_position[1];
-    var z0 = this.vec3_position[2];
-    var side = this.side;
-    
-    const positions = [
-      x0      ,y0     ,z0     ,  
+
+      const x0 = this.vec3_position[0];
+      const y0 = this.vec3_position[1];
+      const z0 = this.vec3_position[2];
+      const side = this.side;
+
+      const positions = [
+      x0      ,y0     ,z0     ,
       x0+side ,y0     ,z0     ,
       x0      ,y0+side,z0     ,
       x0+side ,y0+side,z0     , //Front
-      
-      x0      ,y0     ,z0+side,  
+
+      x0      ,y0     ,z0+side,
       x0+side ,y0     ,z0+side,
       x0      ,y0+side,z0+side,
       x0+side ,y0+side,z0+side, //Back
-      
-      x0      ,y0     ,z0     ,  
+
+      x0      ,y0     ,z0     ,
       x0+side ,y0     ,z0     ,
-      x0      ,y0     ,z0+side,  
+      x0      ,y0     ,z0+side,
       x0+side ,y0     ,z0+side, //Top
-  
-      x0      ,y0+side ,z0     ,  
+
+      x0      ,y0+side ,z0     ,
       x0+side ,y0+side ,z0     ,
-      x0      ,y0+side ,z0+side,  
+      x0      ,y0+side ,z0+side,
       x0+side ,y0+side ,z0+side, //Bottom
-  
-      x0+side ,y0     ,z0     ,  
+
+      x0+side ,y0     ,z0     ,
       x0+side ,y0+side,z0     ,
-      x0+side ,y0     ,z0+side,  
+      x0+side ,y0     ,z0+side,
       x0+side ,y0+side,z0+side, //Right
-  
-      x0      ,y0     ,z0     ,  
+
+      x0      ,y0     ,z0     ,
       x0      ,y0+side,z0     ,
-      x0      ,y0     ,z0+side,  
+      x0      ,y0     ,z0+side,
       x0      ,y0+side,z0+side, //Left
     ];
-  
+
     ctx.bufferData(ctx.ARRAY_BUFFER,
                   new Float32Array(positions),
                   ctx.STATIC_DRAW);
-  
+
     this.position = positionBuffer;
-  
+
   const faceColors = [
       [1.0,  1.0,  1.0,  1.0],    // Front face: white
       [1.0,  0.0,  0.0,  1.0],    // Back face: red
@@ -64,33 +61,33 @@ class Cube extends GameObject {
       [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
       [1.0,  0.0,  1.0,  1.0],    // Left face: purple
     ];
-  
+
     // Convert the array of colors into a table for all the vertices.
-  
+
     var colorsArray = [];
-  
+
     for (var j = 0; j < faceColors.length; ++j) {
       const c = faceColors[j];
-  
+
       // Repeat each color four times for the four vertices of the face
       colorsArray = colorsArray.concat(c, c, c, c);
     }
-  
+
     const colorBuffer = ctx.createBuffer();
-    
+
     ctx.bindBuffer(ctx.ARRAY_BUFFER, colorBuffer);
-  
+
     ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(colorsArray), ctx.STATIC_DRAW);
-    
+
     this.colors = colorBuffer;
-  
+
     const indexBuffer = ctx.createBuffer();
     ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, indexBuffer);
-  
+
     // This array defines each face as two triangles, using the
     // indices into the vertex array to specify each triangle's
     // position.
-  
+
     const indicesArray = [
       0,  1,  2,      1,  2,  3,    // front
       4,  5,  6,      5,  6,  7,    // back
@@ -99,17 +96,17 @@ class Cube extends GameObject {
       16, 17, 18,     17, 18, 19,   // right
       20, 21, 22,     21, 22, 23,   // left
     ];
-  
+
     // Now send the element array to GL
-  
+
     ctx.bufferData(ctx.ELEMENT_ARRAY_BUFFER,
         new Uint16Array(indicesArray), ctx.STATIC_DRAW);
     this.indices_count = indicesArray.length;
     this.indices = indexBuffer;
-  };
+  }
 
   render(ctx,viewMatrix,projectionMatrix) {
-	
+
     this.material.renderBind(ctx,this.transformMatrix,viewMatrix,projectionMatrix);
 
 
@@ -131,9 +128,9 @@ class Cube extends GameObject {
 
 	    ctx.enableVertexAttribArray(
 	        this.material.programInfo.attribLocations.vertexPosition);
-	     
+
 	    const numComponentsColor = 4;  // pull out 2 values per iteration
-	 
+
 		ctx.bindBuffer(ctx.ARRAY_BUFFER, this.colors);
 	    ctx.vertexAttribPointer(
 	        this.material.programInfo.attribLocations.vertexColor,
@@ -141,18 +138,18 @@ class Cube extends GameObject {
 	        type,
 	        normalize,
 	        stride,
-	        offset);		
+	        offset);
 
 	    ctx.enableVertexAttribArray(
         	this.material.programInfo.attribLocations.vertexColor);
-	     
-		
+
+
 		ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, this.indices);
 
 		    const vertexCount = this.indices_count;
 		    const type2 = ctx.UNSIGNED_SHORT;
 		    ctx.drawElements(ctx.TRIANGLES, vertexCount, type2, offset);
-  
+
   }
   update(time) { }
 }

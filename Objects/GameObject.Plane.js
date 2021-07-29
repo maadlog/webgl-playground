@@ -3,8 +3,6 @@ class Plane extends GameObject {
     super(ctx);
     this.vec3_position = vec3_position;
     this.side = side;
-
-    this.initBuffers(ctx);
   }
 
   initBuffers(ctx) {

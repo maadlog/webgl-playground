@@ -1,65 +1,60 @@
-class TexturedAnimatedCube extends GameObject {
+class TexturedAnimatedCube extends AnimatedCube {
   constructor(ctx,vec3_position,side,texture_url) {
-    super(ctx,new TextureMaterial(ctx,texture_url));
-    this.vec3_position = vec3_position;
-    this.side = side;
-
-    this.rotation = 0.0;
-    this.initBuffers(ctx);
+    super(ctx,vec3_position,side,new TextureMaterial(ctx,texture_url));
   }
   initBuffers(ctx) {
       const positionBuffer = ctx.createBuffer();
-    
+
       ctx.bindBuffer(ctx.ARRAY_BUFFER, positionBuffer);
-    
+
       var x0 = this.vec3_position[0];
       var y0 = this.vec3_position[1];
       var z0 = this.vec3_position[2];
       var side = this.side;
-      
+
       const positions = [
-        x0      ,y0     ,z0     ,  
+        x0      ,y0     ,z0     ,
         x0+side ,y0     ,z0     ,
         x0      ,y0+side,z0     ,
         x0+side ,y0+side,z0     , //Front
-        
-        x0      ,y0     ,z0+side,  
+
+        x0      ,y0     ,z0+side,
         x0+side ,y0     ,z0+side,
         x0      ,y0+side,z0+side,
         x0+side ,y0+side,z0+side, //Back
-        
-        x0      ,y0     ,z0     ,  
+
+        x0      ,y0     ,z0     ,
         x0+side ,y0     ,z0     ,
-        x0      ,y0     ,z0+side,  
+        x0      ,y0     ,z0+side,
         x0+side ,y0     ,z0+side, //Top
-    
-        x0      ,y0+side ,z0     ,  
+
+        x0      ,y0+side ,z0     ,
         x0+side ,y0+side ,z0     ,
-        x0      ,y0+side ,z0+side,  
+        x0      ,y0+side ,z0+side,
         x0+side ,y0+side ,z0+side, //Bottom
-    
-        x0+side ,y0     ,z0     ,  
+
+        x0+side ,y0     ,z0     ,
         x0+side ,y0+side,z0     ,
-        x0+side ,y0     ,z0+side,  
+        x0+side ,y0     ,z0+side,
         x0+side ,y0+side,z0+side, //Right
-    
-        x0      ,y0     ,z0     ,  
+
+        x0      ,y0     ,z0     ,
         x0      ,y0+side,z0     ,
-        x0      ,y0     ,z0+side,  
+        x0      ,y0     ,z0+side,
         x0      ,y0+side,z0+side, //Left
       ];
-    
+
       ctx.bufferData(ctx.ARRAY_BUFFER,
                     new Float32Array(positions),
                     ctx.STATIC_DRAW);
-    
+
       this.position = positionBuffer;
-    
-    
-    
+
+
+
     const textureCoordBuffer = ctx.createBuffer();
       ctx.bindBuffer(ctx.ARRAY_BUFFER, textureCoordBuffer);
-    
+
       const textureCoordinates = [
         // Front
         0.0,  0.0,
@@ -92,20 +87,20 @@ class TexturedAnimatedCube extends GameObject {
         0.0,  1.0,
         1.0,  1.0,
       ];
-    
+
       ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(textureCoordinates),
                     ctx.STATIC_DRAW);
-    
-    
+
+
     this.textureCoord = textureCoordBuffer;
-    
+
       const indexBuffer = ctx.createBuffer();
       ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    
+
       // This array defines each face as two triangles, using the
       // indices into the vertex array to specify each triangle's
       // position.
-    
+
       const indicesArray = [
         0,  1,  2,      1,  2,  3,    // front
         4,  5,  6,      5,  6,  7,    // back
@@ -114,16 +109,16 @@ class TexturedAnimatedCube extends GameObject {
         16, 17, 18,     17, 18, 19,   // right
         20, 21, 22,     21, 22, 23,   // left
       ];
-    
+
       // Now send the element array to GL
-    
+
       ctx.bufferData(ctx.ELEMENT_ARRAY_BUFFER,
           new Uint16Array(indicesArray), ctx.STATIC_DRAW);
       this.indices_count = indicesArray.length;
       this.indices = indexBuffer;
   }
   render(ctx,viewMatrix,projectionMatrix) {
-  
+
     this.material.renderBind(ctx,this.transformMatrix,viewMatrix,projectionMatrix);
 
 
@@ -145,7 +140,7 @@ class TexturedAnimatedCube extends GameObject {
 
       ctx.enableVertexAttribArray(
           this.material.programInfo.attribLocations.vertexPosition);
-     
+
 
       const numTexture = 2; // every coordinate composed of 2 values
 
@@ -161,42 +156,13 @@ class TexturedAnimatedCube extends GameObject {
 
       // Tell the shader we bound the texture to texture unit 0
       ctx.uniform1i(this.material.programInfo.uniformLocations.uSampler, 0);
-       
-    
+
+
     ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, this.indices);
 
         const vertexCount = this.indices_count;
         const type2 = ctx.UNSIGNED_SHORT;
         ctx.drawElements(ctx.TRIANGLES, vertexCount, type2, offset);
-  
-  }
-  update(time) {
-  
-    this.rotation += time * 0.001;
-    
-    var pace = (this.side / 2);
-  
-    var x0 = this.vec3_position[0];
-    var y0 = this.vec3_position[1];
-    var z0 = this.vec3_position[2];
-  
-    mat4.translate(this.transformMatrix,
-      this.base_transformMatrix,
-      [x0+pace, y0+pace, z0+pace]);
-  
-    mat4.rotate(this.transformMatrix,
-      this.transformMatrix,
-      this.rotation,
-      vec3.fromValues(1.0,0.0,0.0));
-  
-    mat4.rotate(this.transformMatrix,
-      this.transformMatrix,
-      this.rotation * 0.7,
-      vec3.fromValues(0.0,1.0,0.0));
-  
-    mat4.translate(this.transformMatrix,
-      this.transformMatrix,
-      [-x0-pace, -y0-pace, -z0-pace]);
-  
+
   }
 }

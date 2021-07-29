@@ -7,7 +7,6 @@ class SpikedSphere extends GameObject {
     this.latitude_stripes = 10+3*n;
   
     this.rotation = 0.0;
-    this.initBuffers(ctx);
   }
 
   initBuffers(ctx) {

@@ -34,6 +34,7 @@ class GameBox {
 
   register(aGameObject) {
     this.gameObjects.push(aGameObject);
+    aGameObject.initBuffers(this.ctx);
   }
 
   update(timeElapsed) {

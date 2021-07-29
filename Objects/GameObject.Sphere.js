@@ -7,7 +7,6 @@ class Sphere extends GameObject {
     this.longitude_stripes = 45;
     this.latitude_stripes = 45;  
     this.rotation = 0.0;
-    this.initBuffers(ctx);
   }
 
   initBuffers(ctx) {

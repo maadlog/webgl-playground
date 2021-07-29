@@ -5,11 +5,9 @@ class Tree extends GameObject {
     this.size = size;
   
     this.Wireframe = new Wireframe(ctx);
-    this.initBuffers(ctx);
   }
 
   initBuffers(ctx) {
-
     const positionBuffer = ctx.createBuffer();
   
     ctx.bindBuffer(ctx.ARRAY_BUFFER, positionBuffer);
