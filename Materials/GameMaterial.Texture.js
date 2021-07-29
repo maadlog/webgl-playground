@@ -91,40 +91,6 @@ class TextureMaterial extends GameMaterial {
         return texture;
     };
 
-    initShaderProgram(ctx) {
-        const vertexShader = this.loadShader(ctx, ctx.VERTEX_SHADER, this.vsSource);
-        const fragmentShader = this.loadShader(ctx, ctx.FRAGMENT_SHADER, this.fsSource);
-
-        // Create the shader program
-
-        const shaderProgram = ctx.createProgram();
-        ctx.attachShader(shaderProgram, vertexShader);
-        ctx.attachShader(shaderProgram, fragmentShader);
-        ctx.linkProgram(shaderProgram);
-
-        // If creating the shader program failed, alert
-
-        if (!ctx.getProgramParameter(shaderProgram, ctx.LINK_STATUS)) {
-            alert('Unable to initialize the shader program: ' + ctx.getProgramInfoLog(shaderProgram));
-            return null;
-        }
-
-        return shaderProgram;
-    }
-
-    loadShader(ctx ,type, source) {
-        const shader = ctx.createShader(type);
-        ctx.shaderSource(shader, source);
-        ctx.compileShader(shader);
-
-        if (!ctx.getShaderParameter(shader, ctx.COMPILE_STATUS)) {
-            alert('An error occurred compiling the shaders: ' + ctx.getShaderInfoLog(shader));
-            ctx.deleteShader(shader);
-            return null;
-        }
-        return shader;
-    }
-
     renderBind(ctx,transformMatrix,viewMatrix,projectionMatrix) {
         ctx.useProgram(this.programInfo.program);
 
