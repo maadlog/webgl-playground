@@ -1,17 +1,11 @@
 class GameObject {
   constructor(ctx,material) {
-    if(!!material)
-    {
-      this.material = material;
-    } 
-    else 
-    {
-      this.material = new GameMaterial(ctx);
-    }  
+    this.material = material || new GameMaterial(ctx);
+    this.material.loadProgramInfo(ctx);
 
     this.base_transformMatrix = mat4.create();
     this.transformMatrix = mat4.create();
-      
+
     this.position = null;
     this.colors = null;
     this.indices = null;
@@ -35,9 +29,9 @@ class GameObject {
  * For new game objects:
  * MyNewFancyObject = function(ctx) {
  * 	GameObject.call(this,ctx);
- * 
+ *
  * 	// Logic Here //
- * 
+ *
  * }
  * MyNewFancyObject.prototype = Object.create(GameObject.prototype);
  * MyNewFancyObject.prototype.constructor = MyNewFancyObject;
