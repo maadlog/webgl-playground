@@ -7,7 +7,7 @@ class GameBox {
 
     this.gameObjects = [];
 
-    var htmlCanvas = document.getElementById(canvas_id);
+    const htmlCanvas = document.getElementById(canvas_id);
     htmlCanvas.width = htmlCanvas.clientWidth;
     htmlCanvas.height = htmlCanvas.clientHeight;
     this.canvas = htmlCanvas;
@@ -39,10 +39,8 @@ class GameBox {
 
   update(timeElapsed) {
     this.camera.update(timeElapsed);
-    
-    this.gameObjects.forEach( function (value,index,array) {
-            value.update(timeElapsed);
-        });
+
+    this.gameObjects.forEach((value) => value.update(timeElapsed));
   }
 
   render () {
@@ -50,15 +48,15 @@ class GameBox {
     this.ctx.clearDepth(1.0);                 // Clear everything
     this.ctx.enable(this.ctx.DEPTH_TEST);           // Enable depth testing
     this.ctx.depthFunc(this.ctx.LEQUAL);            // Near things obscure far things
-  
+
     // Clear the canvas before we start drawing on it.
-  
+
     this.ctx.clear(this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT);
-  
+
     const projectionMatrix = this.camera.projectionMatrix();
     const viewMatrix = this.camera.viewMatrix();
-  
-    for (var i = this.gameObjects.length - 1; i >= 0; i--) {
+
+    for (let i = this.gameObjects.length - 1; i >= 0; i--) {
       this.gameObjects[i].render(this.ctx,viewMatrix,projectionMatrix);
     }
   }
