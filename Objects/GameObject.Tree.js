@@ -3,15 +3,33 @@ class Tree extends GameObject {
     super(ctx);
     this.vec3_position = vec3_position;
     this.size = size;
-  
+
     this.Wireframe = new Wireframe(ctx);
+  }
+
+  getColorsArray() {
+   // Convert the array of colors into a table for all the vertices.
+   let colorsArray = [];
+
+   //Leaves
+   for (var j = 0; j < 117 ; ++j) {
+    const green = [0.0,  1.0,  0.0,  1.0];
+    colorsArray = colorsArray.concat(green);
+   }
+   //Bark
+   for (var j = 117; j < 144 ; ++j) {
+    const brown = [0.43,  0.21,  0.1,  1.0];
+    colorsArray = colorsArray.concat(brown);
+   }
+
+   return colorsArray;
   }
 
   initBuffers(ctx) {
     const positionBuffer = ctx.createBuffer();
-  
+
     ctx.bindBuffer(ctx.ARRAY_BUFFER, positionBuffer);
-    
+
    const positions =  [
     -0.00544,    -0.809443,    -0.939428,
     0.019167,    3.227034,    0.022684,
@@ -161,39 +179,26 @@ class Tree extends GameObject {
     ctx.bufferData(ctx.ARRAY_BUFFER,
                   new Float32Array(positions),
                   ctx.STATIC_DRAW);
-  
+
     this.position = positionBuffer;
-  
-  
-  
-  
-    // Convert the array of colors into a table for all the vertices.
-  
-    var colorsArray = [];
-    
-    //Leaves
-    for (var j = 0; j < 117 ; ++j) {
-      const green = [0.0,  1.0,  0.0,  1.0];
-      colorsArray = colorsArray.concat(green);
-    }
-    //Bark
-    for (var j = 117; j < 144 ; ++j) {
-      const brown = [0.43,  0.21,  0.1,  1.0];
-      colorsArray = colorsArray.concat(brown);
-    }
-  
+
+
+
+
+    var colorsArray = this.getColorsArray();
+
     const colorBuffer = ctx.createBuffer();
-    
+
     ctx.bindBuffer(ctx.ARRAY_BUFFER, colorBuffer);
-  
+
     ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(colorsArray), ctx.STATIC_DRAW);
-    
+
     this.colors = colorBuffer;
-  
+
     const indexBuffer = ctx.createBuffer();
     ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, indexBuffer);
-  
-  
+
+
    const indicesArray = [
     63,    1,    3,
     63,    3,    64,
@@ -477,81 +482,35 @@ class Tree extends GameObject {
     117,    136,    119,
   ];
     // Now send the element array to GL
-  
+
     ctx.bufferData(ctx.ELEMENT_ARRAY_BUFFER,
         new Uint16Array(indicesArray), ctx.STATIC_DRAW);
     this.indices_count = indicesArray.length;
     this.indices = indexBuffer;
-  
+
     this.Wireframe.initBuffers(ctx,positions,indicesArray);
   }
 
   render(ctx,viewMatrix,projectionMatrix) {
-      this.material.renderBind(ctx,this.transformMatrix,viewMatrix,projectionMatrix);
-  
-  
-        const numComponents = 3;  // pull out 2 values per iteration
-        const type = ctx.FLOAT;    // the data in the buffer is 32bit floats
-        const normalize = false;  // don't normalize
-        const stride = 0;         // how many bytes to get from one set of values to the next
-                             // 0 = use type and numComponents above
-        const offset = 0;         // how many bytes inside the buffer to start from
-  
-      ctx.bindBuffer(ctx.ARRAY_BUFFER, this.position);
-        ctx.vertexAttribPointer(
-            this.material.programInfo.attribLocations.vertexPosition,
-            numComponents,
-            type,
-            normalize,
-            stride,
-            offset);
-  
-        ctx.enableVertexAttribArray(
-            this.material.programInfo.attribLocations.vertexPosition);
-         
-        const numComponentsColor = 4;  // pull out 2 values per iteration
-     
-      ctx.bindBuffer(ctx.ARRAY_BUFFER, this.colors);
-        ctx.vertexAttribPointer(
-            this.material.programInfo.attribLocations.vertexColor,
-            numComponentsColor,
-            type,
-            normalize,
-            stride,
-            offset);		
-  
-        ctx.enableVertexAttribArray(
-            this.material.programInfo.attribLocations.vertexColor);
-         
-  
-      
-         
-      
-      ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, this.indices);
-  
-          const vertexCount = this.indices_count;
-          const type2 = ctx.UNSIGNED_SHORT;
-          ctx.drawElements(ctx.TRIANGLES, vertexCount, type2, offset);
-  
+      super.render(ctx, viewMatrix, projectionMatrix);
       this.Wireframe.render(ctx,viewMatrix,projectionMatrix);
-    
   }
 
   update(time) {
     var x0 = this.vec3_position[0];
     var y0 = this.vec3_position[1];
     var z0 = this.vec3_position[2];
-  
+
     this.transformMatrix = mat4.create();
-  
+
     mat4.translate(this.transformMatrix,
       this.transformMatrix,
       [x0, y0, z0]);
-  
+
     mat4.scale(this.transformMatrix,
       this.transformMatrix,
       [this.size, this.size * 0.6, this.size]);
-  
+
     this.Wireframe.updateMatrix(this.transformMatrix);
   }
 }

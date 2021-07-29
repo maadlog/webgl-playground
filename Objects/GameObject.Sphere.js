@@ -5,7 +5,7 @@ class Sphere extends GameObject {
     this.vec3_position = vec3_position;
     this.radius = radius;
     this.longitude_stripes = 45;
-    this.latitude_stripes = 45;  
+    this.latitude_stripes = 45;
     this.rotation = 0.0;
   }
 
@@ -38,7 +38,7 @@ class Sphere extends GameObject {
           positions.push(this.radius * z);
         }
       }
-    
+
     const positionBuffer = ctx.createBuffer();
 
     ctx.bindBuffer(ctx.ARRAY_BUFFER, positionBuffer);
@@ -51,11 +51,11 @@ class Sphere extends GameObject {
 
 
     const colorBuffer = ctx.createBuffer();
-    
+
     ctx.bindBuffer(ctx.ARRAY_BUFFER, colorBuffer);
 
     ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(colorsArray), ctx.STATIC_DRAW);
-    
+
     this.colors = colorBuffer;
 
   var indicesArray = [];
@@ -83,56 +83,10 @@ class Sphere extends GameObject {
     this.indices = indexBuffer;
   }
 
-  render(ctx,viewMatrix,projectionMatrix) {
-  
-    this.material.renderBind(ctx,this.transformMatrix,viewMatrix,projectionMatrix);
-
-
-      const numComponents = 3;  // pull out 2 values per iteration
-      const type = ctx.FLOAT;    // the data in the buffer is 32bit floats
-      const normalize = false;  // don't normalize
-      const stride = 0;         // how many bytes to get from one set of values to the next
-                          // 0 = use type and numComponents above
-      const offset = 0;         // how many bytes inside the buffer to start from
-
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, this.position);
-      ctx.vertexAttribPointer(
-          this.material.programInfo.attribLocations.vertexPosition,
-          numComponents,
-          type,
-          normalize,
-          stride,
-          offset);
-
-      ctx.enableVertexAttribArray(
-          this.material.programInfo.attribLocations.vertexPosition);
-       
-      const numComponentsColor = 4;  
-   
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, this.colors);
-      ctx.vertexAttribPointer(
-          this.material.programInfo.attribLocations.vertexColor,
-          numComponentsColor,
-          type,
-          normalize,
-          stride,
-          offset);    
-
-      ctx.enableVertexAttribArray(
-          this.material.programInfo.attribLocations.vertexColor);
-       
-    
-    ctx.bindBuffer(ctx.ELEMENT_ARRAY_BUFFER, this.indices);
-
-        const vertexCount = this.indices_count;
-        const type2 = ctx.UNSIGNED_SHORT;
-        ctx.drawElements(ctx.TRIANGLES, vertexCount, type2, offset);
-  }
-
   update(time) {
     this.material.update(time);
-    this.rotation += time * 0.001;  
-    
+    this.rotation += time * 0.001;
+
     var x0 = this.vec3_position[0];
     var y0 = this.vec3_position[1];
     var z0 = this.vec3_position[2];
