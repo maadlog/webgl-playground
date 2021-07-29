@@ -20,7 +20,6 @@ function Init(){
   game.register(spikedSphere);
 
 
-
   var field = new Plane(game.ctx,vec3.fromValues(-50,-10,-50),100);
   game.register(field);
 
@@ -28,7 +27,6 @@ function Init(){
   var ntree = new NormalsTree(game.ctx,vec3.fromValues(1,1,18),4);
   game.register(tree);
   game.register(ntree);
-
 
   game.gameLoop();
 }
